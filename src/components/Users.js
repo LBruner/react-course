@@ -13,11 +13,9 @@ class Users extends Component {
         this.setState((curState) => {
             return {showUsers: !curState.showUsers, 'name' : 'Bruner', 'love' : 'Books'}
         })
-        console.log(this.state)
     }
 
     render() {
-        console.log(this.state)
         const usersList = (
             <ul>
                 {this.props.users.map((user) => (
