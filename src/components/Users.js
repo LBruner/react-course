@@ -9,6 +9,13 @@ class Users extends Component {
         super();
         this.state = {'name' : 'Leandro', age: 20, showUsers: false};
     }
+    
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.users.length === 0){
+            throw  new Error('No users provided!')
+        }
+    }
+
     toggleUsersHandler(){
         this.setState((curState) => {
             return {showUsers: !curState.showUsers, 'name' : 'Bruner', 'love' : 'Books'}
