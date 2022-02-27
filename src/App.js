@@ -1,7 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 
-import JokeList from './components/MoviesList';
+
+import JokeList from './components/JokeList';
 import './App.css';
+import AddJoke from "./components/AddJoke";
 
 function App() {
     const [jokes, setJokes] = useState([])
@@ -12,7 +14,7 @@ function App() {
         setIsLoading(true)
         setHasError(null)
         try {
-            const url = 'https://v2.jokeapi.dev/joke/Any?type=single';
+            const url = 'https://http-react-8179f-default-rtdb.firebaseio.com/jokes.json';
             const response = await fetch(url);
             const data = await response.json();
 
@@ -38,6 +40,10 @@ function App() {
         FetchMoviesHandler()
     }, [FetchMoviesHandler])
 
+    function addJokeHandler(joke) {
+        console.log(joke);
+    }
+    
     let content;
     if (jokes.length > 0)
         content = <JokeList jokes={jokes}/>
@@ -49,6 +55,9 @@ function App() {
 
     return (
         <React.Fragment>
+            <section>
+                <AddJoke onAddJoke={addJokeHandler}/>
+            </section>
             <section>
                 <button onClick={FetchMoviesHandler}>Fetch Movies</button>
             </section>
