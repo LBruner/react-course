@@ -9,8 +9,8 @@ function App() {
     const [jokes, setJokes] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(false)
-    
-    const FetchMoviesHandler = useCallback(async() => {
+
+    const FetchMoviesHandler = useCallback(async () => {
         setIsLoading(true)
         setHasError(null)
         try {
@@ -18,32 +18,44 @@ function App() {
             const response = await fetch(url);
             const data = await response.json();
 
+            const loadedMovies = [];
+
+            for (const key in data) {
+                loadedMovies.push({
+                    id: key,
+                    text: data[key].text,
+                    category: data[key].category
+                })
+            }
+
             if (data.error) {
                 throw new Error('Something went wrong...')
             }
+            setJokes(loadedMovies)
 
-            setJokes(prevState => [...prevState,
-                {
-                    id: data.id,
-                    text: data.joke,
-                    category: data.category
-                }
-            ])
             setIsLoading(false)
         } catch (e) {
             setHasError(e.message)
         }
         setIsLoading(false)
     }, [])
-    
+
     useEffect(() => {
         FetchMoviesHandler()
     }, [FetchMoviesHandler])
 
-    function addJokeHandler(joke) {
-        console.log(joke);
+    async function addJokeHandler(joke) {
+        const url = 'https://http-react-8179f-default-rtdb.firebaseio.com/jokes.json';
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(joke),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json();
     }
-    
+
     let content;
     if (jokes.length > 0)
         content = <JokeList jokes={jokes}/>
