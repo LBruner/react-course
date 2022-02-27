@@ -14,7 +14,7 @@ const JokeList = (props) => {
           category={joke.category}
         />
       ))}
-    </ul>
+    </ul> 
   );
 };
 
