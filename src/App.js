@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import JokeList from './components/MoviesList';
 import './App.css';
@@ -7,8 +7,8 @@ function App() {
     const [jokes, setJokes] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(false)
-
-    async function FetchMoviesHandler() {
+    
+    const FetchMoviesHandler = useCallback(async() => {
         setIsLoading(true)
         setHasError(null)
         try {
@@ -32,7 +32,11 @@ function App() {
             setHasError(e.message)
         }
         setIsLoading(false)
-    }
+    }, [])
+    
+    useEffect(() => {
+        FetchMoviesHandler()
+    }, [FetchMoviesHandler])
 
     let content;
     if (jokes.length > 0)
