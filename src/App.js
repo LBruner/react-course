@@ -1,21 +1,36 @@
-import UserFinder from './components/UserFinder';
-import UsersContext from "./components/Store/users-context";
+import React, {useState} from 'react';
 
-const DUMMY_USERS = [
-    { id: 'u1', name: 'Max' },
-    { id: 'u2', name: 'Manuel' },
-    { id: 'u3', name: 'Julie' },
-];
+import JokeList from './components/MoviesList';
+import './App.css';
 
 function App() {
-    const usersContext = {
-        users: DUMMY_USERS
+    const [jokes, setJokes] = useState([])
+    const [hasJokes, setHasJokes] = useState(false);
+
+    function FetchMoviesHandler() {
+        const url = 'https://v2.jokeapi.dev/joke/Any?type=single';
+        fetch(url)
+            .then(res => res.json())
+            .then(data => setJokes(prevState => [...prevState,
+                {
+                    id: data.id,
+                    text: data.joke,
+                    category: data.category
+                }
+            ]))
+        setHasJokes(true)
+        console.log(jokes)
     }
 
     return (
-        <UsersContext.Provider value={usersContext}>
-            <UserFinder />
-        </UsersContext.Provider>
+        <React.Fragment>
+            <section>
+                <button onClick={FetchMoviesHandler}>Fetch Movies</button>
+            </section>
+            <section>
+                <JokeList jokes={jokes}/>
+            </section>
+        </React.Fragment>
     );
 }
 
