@@ -6,20 +6,42 @@ import './App.css';
 function App() {
     const [jokes, setJokes] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [hasError, setHasError] = useState(false)
+
     async function FetchMoviesHandler() {
         setIsLoading(true)
-        const url = 'https://v2.jokeapi.dev/joke/Any?type=single';
-        const response = await fetch(url);
-        const data = await response.json();
-        setJokes(prevState => [...prevState,
-            {
-                id: data.id,
-                text: data.joke,
-                category: data.category
+        setHasError(null)
+        try {
+            const url = 'https://v2.jokeapi.dev/joke/Any?type=single';
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error('Something went wrong...')
             }
-        ])
+
+            setJokes(prevState => [...prevState,
+                {
+                    id: data.id,
+                    text: data.joke,
+                    category: data.category
+                }
+            ])
+            setIsLoading(false)
+        } catch (e) {
+            setHasError(e.message)
+        }
         setIsLoading(false)
     }
+
+    let content;
+    if (jokes.length > 0)
+        content = <JokeList jokes={jokes}/>
+    if (hasError)
+        content = <p>{hasError}</p>
+    if (isLoading)
+        content = <p>Loading...</p>
+
 
     return (
         <React.Fragment>
@@ -27,9 +49,7 @@ function App() {
                 <button onClick={FetchMoviesHandler}>Fetch Movies</button>
             </section>
             <section>
-                {jokes.length > 0 && <JokeList jokes={jokes}/>}
-                {jokes.length === 0 && !isLoading && <p>Found no movies...</p>}
-                {isLoading && <p>Loading...</p>}
+                {content}
             </section>
         </React.Fragment>
     );
