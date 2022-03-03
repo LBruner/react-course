@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 const useCounter = () => {
-    const BackwardCounter = () => {
         const [counter, setCounter] = useState(0);
 
         useEffect(() => {
@@ -11,9 +10,8 @@ const useCounter = () => {
 
             return () => clearInterval(interval);
         }, []);
-    };
-
-    export default BackwardCounter
+        
+        return {counter, nums: [1,2,3,4,5]};
 }
 
 export default useCounter;
