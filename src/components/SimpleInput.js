@@ -5,15 +5,24 @@ const SimpleInput = (props) => {
     const nameRef = useRef();
     const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
     const [enteredNameTouched, setEnteredNameTouched] = useState(false);
-    
-    useEffect(() =>{
+
+    useEffect(() => {
         if (enteredNameIsValid) {
             console.log('NI is valid!')
         }
     }, [enteredNameIsValid])
-    
+
     const nameInputChangeHandler = e => {
         setEnteredName(e.target.value);
+        
+        if (enteredName.trim() === '') {
+            setEnteredNameIsValid(false)
+            return
+        }
+    }
+
+    const nameInputBlurHandler = () => {
+        setEnteredNameTouched(true)
     }
 
     const formSubmissionHandler = e => {
@@ -23,18 +32,21 @@ const SimpleInput = (props) => {
             setEnteredNameIsValid(false)
             return
         }
-        
+
         setEnteredNameIsValid(true)
     }
-    
+
     const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
     const nameInputClasses = nameInputIsInvalid ? 'form-control invalid' : 'form-control'
+
+
     return (
         <form onSubmit={formSubmissionHandler}>
             <div className={nameInputClasses}>
                 <label htmlFor='name'>Your Name</label>
-                <input ref={nameRef} type='text' id='name' onChange={nameInputChangeHandler}/>
+                <input ref={nameRef} type='text' id='name' onChange={nameInputChangeHandler}
+                       onBlur={nameInputBlurHandler}/>
                 {nameInputIsInvalid && <p className={'error-text'}>Name must not be empty.</p>}
             </div>
             <div className="form-actions">
