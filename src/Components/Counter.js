@@ -1,7 +1,10 @@
 import classes from './Counter.module.css';
 import {useDispatch, useSelector} from "react-redux";
+import {createSlice} from "@reduxjs/toolkit";
 
 const Counter = () => {
+
+    
     const counter = useSelector(state => state.counter)
     const dispatch = useDispatch();
     
