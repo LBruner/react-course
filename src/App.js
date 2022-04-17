@@ -1,18 +1,16 @@
-import Counter from "./Components/Counter";
-import Header from "./Components/Header";
-import Auth from "./Components/Auth";
+import Cart from './components/Cart/Cart';
+import Layout from './components/Layout/Layout';
+import Products from './components/Shop/Products';
 import {useSelector} from "react-redux";
-import UserProfile from "./Components/UserProfile";
 
-const App = () => {
-    const {isLoggedIn} = useSelector(state => state.auth)
+function App() {
+    const showCart = useSelector(state => state.ui.cartIsVisible)
+
     return (
-        <>
-            <Header/>
-            <Auth/>
-            <Counter/>
-            {isLoggedIn && <UserProfile/>}
-        </>
+        <Layout>
+            {showCart && <Cart/>}
+            <Products/>
+        </Layout>
     );
 }
 
